@@ -19,6 +19,7 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
+  const [profile, setprofile] = useState('');
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -59,6 +60,13 @@ const Home = () => {
 
   useEffect(() => {
     const getPosts = async () => {
+      const data = await AsyncStorage.getItem('profile');
+      if (data) {
+        const value = JSON.parse(data);
+        if (value?.image) {
+          setprofile(value?.image);
+        }
+      }
       const postsData = await AsyncStorage.getItem('posts');
       if (postsData) {
         setPosts(JSON.parse(postsData));
@@ -66,15 +74,20 @@ const Home = () => {
     };
     getPosts();
   }, []);
+  console.log('Profile: ', profile);
   return (
     <React.Fragment>
       <SafeAreaView style={styles.container}>
         <Appbar.Header elevated style={styles.header}>
-          <Appbar.Content title='Play Pic' titleStyle={styles.logo} />
+          <Appbar.Content title='Pixagram' titleStyle={styles.logo} />
           <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <Image
               style={styles.tinyLogo}
-              source={require('./../../../assets/profile.png')}
+              source={
+                profile
+                  ? { uri: profile }
+                  : require('./../../../assets/profile.png')
+              }
             />
           </TouchableOpacity>
         </Appbar.Header>
@@ -168,6 +181,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     marginRight: 10,
+    borderRadius: 20,
   },
   buttons: {
     width: '99%',
