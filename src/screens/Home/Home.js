@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import {
   View,
   Image,
@@ -16,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [posts, setPosts] = useState([]);
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
@@ -59,21 +61,23 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const getPosts = async () => {
-      const data = await AsyncStorage.getItem('profile');
-      if (data) {
-        const value = JSON.parse(data);
-        if (value?.image) {
-          setprofile(value?.image);
+    if (isFocused) {
+      const getPosts = async () => {
+        const data = await AsyncStorage.getItem('profile');
+        if (data) {
+          const value = JSON.parse(data);
+          if (value?.image) {
+            setprofile(value?.image);
+          }
         }
-      }
-      const postsData = await AsyncStorage.getItem('posts');
-      if (postsData) {
-        setPosts(JSON.parse(postsData));
-      }
-    };
-    getPosts();
-  }, []);
+        const postsData = await AsyncStorage.getItem('posts');
+        if (postsData) {
+          setPosts(JSON.parse(postsData));
+        }
+      };
+      getPosts();
+    }
+  }, [isFocused]);
   console.log('Profile: ', profile);
   return (
     <React.Fragment>
