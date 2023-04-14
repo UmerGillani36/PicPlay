@@ -114,7 +114,7 @@ const Profile = () => {
             width: '100%',
             height: 280,
             borderRadius: 100,
-            marginVertical: 20,
+            marginVertical: 10,
           }}
         />
       )}
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 30,
     paddingHorizontal: 20,
+    marginTop: 40,
   },
   imageContainer: {
     width: 150,
