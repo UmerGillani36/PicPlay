@@ -11,6 +11,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Play Pic to access your camera."
+        }
+      ]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ],
