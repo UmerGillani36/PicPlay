@@ -12,8 +12,10 @@ import {
 import { Appbar, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
+  const navigation = useNavigation();
   const [posts, setPosts] = useState([]);
   const [text, setText] = useState('');
   const [image, setImage] = useState(null);
@@ -69,12 +71,12 @@ const Home = () => {
       <SafeAreaView style={styles.container}>
         <Appbar.Header elevated style={styles.header}>
           <Appbar.Content title='Play Pic' titleStyle={styles.logo} />
-          <View>
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
             <Image
               style={styles.tinyLogo}
               source={require('./../../../assets/profile.png')}
             />
-          </View>
+          </TouchableOpacity>
         </Appbar.Header>
         <View style={styles.containerImage}>
           <TextInput
