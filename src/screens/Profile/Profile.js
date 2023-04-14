@@ -38,6 +38,7 @@ const Profile = () => {
     };
 
     const takePicture = async () => {
+        console.log("hello")
         if (cameraRef.current) {
             const photo = await cameraRef.current.takePictureAsync();
             setImage(photo.uri);
@@ -82,9 +83,11 @@ const Profile = () => {
                 <Text style={styles.buttonText}>Update Profile</Text>
             </TouchableOpacity>
 
+            <Camera ref={cameraRef} style={{ width: 200, height: 200, borderRadius: 100, marginVertical: 50 }} />
 
-            <TouchableOpacity style={styles.cameraContainer} onPress={takePicture}>
-                <Camera ref={cameraRef} style={styles.camera} type={Camera.Constants.Type.back} />
+
+            <TouchableOpacity style={styles.button} onPress={takePicture}>
+                <Text style={styles.buttonText}>Take picture from Camera</Text>
             </TouchableOpacity>
 
         </View>
