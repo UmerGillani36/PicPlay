@@ -206,9 +206,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   image: {
-    width: 200,
+    width: '100%',
     height: 200,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     marginBottom: 10,
   },
   postContainer: {
@@ -225,7 +225,8 @@ const styles = StyleSheet.create({
   postImage: {
     width: '100%',
     height: 200,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
+    borderRadius: 6,
   },
   separator: {
     width: '100%',
