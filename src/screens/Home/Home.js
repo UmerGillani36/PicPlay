@@ -3,16 +3,13 @@ import {
   View,
   Image,
   FlatList,
-  Button,
   Text,
-  TextInput,
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
   Alert,
 } from 'react-native';
-// import { Camera, CameraType } from 'expo-camera';
-import { Appbar } from 'react-native-paper';
+import { Appbar, TextInput } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -31,7 +28,7 @@ const Home = () => {
         quality: 1,
       });
       if (!result.canceled) {
-        setImage(result.assets[0].uri);
+        setImage(result.assets[0]);
       }
     } else {
       alert('Permission to access media library is required');
@@ -43,7 +40,7 @@ const Home = () => {
       const post = {
         text,
         image,
-        date: new Date().getTime(),
+        date: new Date().toDateString(),
       };
       await AsyncStorage.setItem('posts', JSON.stringify([...posts, post]));
       setPosts([...posts, post]);
@@ -51,9 +48,9 @@ const Home = () => {
       setImage(null);
     } else {
       if (!text) {
-        Alert.alert('Please enter something first to post');
+        Alert.alert('Please Write something to post');
       } else {
-        Alert.alert('Please Select an image to proceed');
+        Alert.alert('Please Select Image in order to proceed');
       }
     }
   };
@@ -67,8 +64,6 @@ const Home = () => {
     };
     getPosts();
   }, []);
-  console.log('Posts: ', posts);
-  console.log('Image: ', image);
   return (
     <React.Fragment>
       <SafeAreaView style={styles.container}>
@@ -88,22 +83,33 @@ const Home = () => {
             value={text}
             onChangeText={(value) => setText(value)}
           />
-          <Button
-            title='Select Image'
-            onPress={pickImage}
-            style={{ marginBottom: 10 }}
-          />
+          <TouchableOpacity onPress={pickImage} style={styles.buttons}>
+            <Text style={styles.buttonText}>Select Image</Text>
+          </TouchableOpacity>
           {image && <Image source={{ uri: image.uri }} style={styles.image} />}
-          <Button title='Upload' onPress={uploadPost} style={styles.buttons} />
+          <TouchableOpacity onPress={uploadPost} style={styles.buttons}>
+            <Text style={styles.buttonText}>Upload</Text>
+          </TouchableOpacity>
+          <View style={styles.separator} />
           <FlatList
             data={posts}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <View style={styles.postContainer}>
-                <Text style={styles.postText}>{item.text}</Text>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                  }}
+                >
+                  <Text style={styles.postText}>{item.text}</Text>
+                  <Text style={styles.postText}>{item.date}</Text>
+                </View>
                 {item.image && (
                   <Image
-                    source={{ uri: item.image }}
+                    source={{ uri: item.image.uri }}
                     style={styles.postImage}
                   />
                 )}
@@ -162,16 +168,29 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   buttons: {
-    // width: '80%',
+    width: '99%',
+    height: 40,
+    borderRadius: 5,
     // marginTop: 10,
     // marginBottom: 10,
-    // backgroundColor: '#FAFAFA',
+    color: '#000',
+    backgroundColor: '#FAFAFA',
+    borderColor: 'grey',
+    borderWidth: 1,
+    marginBottom: 10,
+  },
+  buttonText: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    marginTop: 8,
   },
   containerImage: {
     flex: 1,
     // alignItems: 'center',
     // justifyContent: 'center',
-    // backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5',
     padding: 10,
   },
   textInput: {
@@ -205,6 +224,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     resizeMode: 'contain',
+  },
+  separator: {
+    width: '100%',
+    borderBottomWidth: 2,
+    borderBottomColor: 'grey',
   },
 });
 
